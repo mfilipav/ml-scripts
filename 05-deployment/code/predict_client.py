@@ -3,7 +3,7 @@
 
 import requests
 
-
+# run with: python3 predict_client.py
 url = 'http://localhost:9696/predict'
 
 customer_id = 'xyz-123'
@@ -31,9 +31,10 @@ customer = {
 
 
 response = requests.post(url, json=customer).json()
-print(response)
+print("response from server: ", response)
 
-if response['churn'] == True:
-    print('sending promo email to %s' % customer_id)
+if response['churn'] is True:
+    print('ACTION: sending promo email to %s' % customer_id)
 else:
-    print('not sending promo email to %s' % customer_id)
+    print('ACTION: NOT sending promo email to %s' % customer_id)
+

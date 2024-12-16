@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import pickle
-
 import pandas as pd
 import numpy as np
 
@@ -15,14 +14,12 @@ from sklearn.metrics import roc_auc_score
 
 
 # parameters
-
 C = 1.0
 n_splits = 5
 output_file = f'model_C={C}.bin'
 
 
 # data preparation
-
 df = pd.read_csv('data-week-3.csv')
 
 df.columns = df.columns.str.lower().str.replace(' ', '_')
@@ -61,8 +58,8 @@ categorical = [
     'paymentmethod',
 ]
 
-# training 
 
+# training
 def train(df_train, y_train, C=1.0):
     dicts = df_train[categorical + numerical].to_dict(orient='records')
 
@@ -71,7 +68,7 @@ def train(df_train, y_train, C=1.0):
 
     model = LogisticRegression(C=C, max_iter=1000)
     model.fit(X_train, y_train)
-    
+
     return dv, model
 
 
@@ -85,13 +82,9 @@ def predict(df, dv, model):
 
 
 # validation
-
 print(f'doing validation with C={C}')
-
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=1)
-
 scores = []
-
 fold = 0
 
 for train_idx, val_idx in kfold.split(df_full_train):
@@ -116,7 +109,6 @@ print('C=%s %.3f +- %.3f' % (C, np.mean(scores), np.std(scores)))
 
 
 # training the final model
-
 print('training the final model')
 
 dv, model = train(df_full_train, df_full_train.churn.values, C=1.0)
@@ -129,7 +121,6 @@ print(f'auc={auc}')
 
 
 # Save the model
-
 with open(output_file, 'wb') as f_out:
     pickle.dump((dv, model), f_out)
 
